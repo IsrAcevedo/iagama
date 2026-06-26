@@ -77,7 +77,6 @@
     </div>
 </div>
 
-<script src="{{ url_for('static', filename='js/carrito.js') }}"></script>
 <script>
     // Número de WhatsApp de la tienda
     const WHATSAPP_NUMBER = '573213908110'; 
@@ -180,7 +179,10 @@
             // Guardar pedido en BD (estado borrador)
             const response = await fetch('/pedidos/crear', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
                 body: JSON.stringify({
                     nombre_cliente: nombreCliente,
                     telefono_cliente: telefonoCliente,
@@ -201,7 +203,10 @@
 
             // Actualizar estado a pendiente antes de abrir WhatsApp
             await fetch(`/pedidos/${data.pedido_id}/whatsapp`, {
-                method: 'PUT'
+                method: 'PUT',
+                headers: {
+                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
             });
 
             // Abrir WhatsApp

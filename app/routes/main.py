@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, jsonify
 from consultas import consulta,insertar
+from app.utils.saneamiento import sanear_texto, sanear_busqueda, sanear_id, sanear_lista_ids
 
 # Crear el blueprint principal
 main_bp = Blueprint('main', __name__)
@@ -12,12 +13,12 @@ def index():
 
 @main_bp.route('/tienda')
 def tienda():
-    # Obtener filtros de categorías seleccionadas
-    categorias_filtro = request.args.getlist('categoria')
-    # Obtener término de búsqueda
-    busqueda = request.args.get('busqueda', '').strip()
-    # Obtener página actual
-    page = request.args.get('page', 1, type=int)
+    # Obtener filtros de categorías seleccionadas y sanearlos
+    categorias_filtro = sanear_lista_ids(request.args.getlist('categoria'))
+    # Obtener término de búsqueda y sanearlo
+    busqueda = sanear_busqueda(request.args.get('busqueda', ''))
+    # Obtener página actual y sanearla
+    page = sanear_id(request.args.get('page', 1)) or 1
     per_page = 18
 
     # Construir query base

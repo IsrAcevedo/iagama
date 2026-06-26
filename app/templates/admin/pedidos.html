@@ -277,7 +277,10 @@ async function cambiarEstado(pedidoId, nuevoEstado) {
     try {
         const response = await fetch(`/admin/pedidos/${pedidoId}/estado`, {
             method: 'PUT',
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
             body: JSON.stringify({estado: nuevoEstado})
         });
 

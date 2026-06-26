@@ -3,6 +3,7 @@ from consultas import consulta, insertar
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from functools import wraps
+from app.utils.saneamiento import sanear_texto, sanear_busqueda, sanear_id, sanear_lista_ids, sanear_numero
 import os
 import uuid
 import secrets
@@ -184,11 +185,11 @@ def productos():
     Gestión de productos con paginación y filtrado
     """
     try:
-        # Obtener parámetros de filtrado y paginación
-        busqueda = request.args.get('busqueda', '').strip()
-        categoria = request.args.get('categoria', '').strip()
-        estado = request.args.get('estado', '').strip()
-        page = request.args.get('page', 1, type=int)
+        # Obtener parámetros de filtrado y paginación y sanearlos
+        busqueda = sanear_busqueda(request.args.get('busqueda', ''))
+        categoria = sanear_texto(request.args.get('categoria', ''), max_length=100)
+        estado = sanear_texto(request.args.get('estado', ''), max_length=50)
+        page = sanear_id(request.args.get('page', 1)) or 1
         per_page = 20
 
         # Construir query base
