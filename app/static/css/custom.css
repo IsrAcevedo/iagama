@@ -1,0 +1,778 @@
+/* Estilos Personalizados IA GAMA */
+/* Estilos que no se pueden lograr con Tailwind CSS */
+
+/* Logo personalizado */
+.logo-custom {
+    height: 7rem;
+    /* h-28 */
+    width: auto;
+    object-fit: contain;
+}
+
+/* Logo responsive */
+@media (max-width: 768px) {
+    .logo-custom {
+        height: 5rem;
+        /* h-20 en móvil */
+    }
+}
+
+@media (max-width: 640px) {
+    .logo-custom {
+        height: 4rem;
+        /* h-16 en móviles pequeños */
+    }
+}
+
+/* Efectos neón personalizados */
+.neon-blue-custom {
+    color: #001aff;
+    text-shadow: 0 0 18px #151516, 0 8 16px #0059ff;
+}
+
+/* Botón neón personalizado */
+.btn-neon-custom {
+    background: #001aff;
+    box-shadow: 0 0 8px #001aff, 0 0 16px #001aff;
+    color: #ffffff;
+    padding: 1rem 2.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.btn-neon-custom:hover {
+    background: #0012b8;
+    box-shadow: 0 0 12px #d2d2d4, 0 0 24px #d9dadd;
+    transform: scale(1.05);
+}
+
+/* ============================================= */
+/* BOTONES ESTÁNDAR - TONO AZUL NEÓN */
+/* ============================================= */
+
+/* Botón principal estándar */
+.btn-neon {
+    background: #001aff;
+    box-shadow: 0 0 8px #001aff, 0 0 16px #001aff;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.btn-neon:hover {
+    background: #0012b8;
+    box-shadow: 0 0 12px #001aff, 0 0 24px #001aff;
+    transform: translateY(-2px);
+}
+
+/* Botón secundario (más claro) */
+.btn-neon-secondary {
+    background: #0066cc;
+    box-shadow: 0 0 6px #0066cc, 0 0 12px #0066cc;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.btn-neon-secondary:hover {
+    background: #0052a3;
+    box-shadow: 0 0 10px #0066cc, 0 0 20px #0066cc;
+    transform: translateY(-2px);
+}
+
+/* Botón para acciones especiales (WhatsApp, etc.) */
+.btn-neon-special {
+    background: #0066cc;
+    box-shadow: 0 0 8px #0066cc, 0 0 16px #0066cc;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.btn-neon-special:hover {
+    background: #0052a3;
+    box-shadow: 0 0 12px #0066cc, 0 0 24px #0066cc;
+    transform: translateY(-2px);
+}
+
+/* Botón para acciones destructivas (eliminar, cancelar) */
+.btn-neon-danger {
+    background: #dc2626;
+    box-shadow: 0 0 8px #dc2626, 0 0 16px #dc2626;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.btn-neon-danger:hover {
+    background: #b91c1c;
+    box-shadow: 0 0 12px #dc2626, 0 0 24px #dc2626;
+    transform: translateY(-2px);
+}
+
+/* Botón para acciones positivas (guardar, crear) */
+.btn-neon-success {
+    background: #001aff;
+    box-shadow: 0 0 8px #001aff, 0 0 16px #001aff;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.btn-neon-success:hover {
+    background: #0012b8;
+    box-shadow: 0 0 12px #001aff, 0 0 24px #001aff;
+    transform: translateY(-2px);
+}
+
+/* Botón para acciones neutras (cancelar, volver) */
+.btn-neon-neutral {
+    background: #4b5563;
+    box-shadow: 0 0 6px #4b5563, 0 0 12px #4b5563;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.btn-neon-neutral:hover {
+    background: #374151;
+    box-shadow: 0 0 10px #4b5563, 0 0 20px #4b5563;
+    transform: translateY(-2px);
+}
+
+/* Animaciones personalizadas */
+@keyframes neon-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        text-shadow: 0 0 8px #0066cc, 0 0 16px #0066cc;
+    }
+
+    50% {
+        opacity: 0.8;
+        text-shadow: 0 0 12px #0066cc, 0 0 24px #0066cc;
+    }
+}
+
+.neon-pulse {
+    animation: neon-pulse 2s infinite;
+}
+
+/* Bordes personalizados */
+.border-neon-custom {
+    border: 2px solid #0066cc;
+    box-shadow: 0 0 8px rgba(0, 102, 204, 0.5);
+}
+
+/* Fondo con gradiente personalizado */
+.bg-neon-gradient {
+    background: linear-gradient(135deg, #001aff 0%, #0052a3 100%);
+}
+
+/* Sombra personalizada para imágenes */
+.shadow-neon-image {
+    filter: drop-shadow(0 0 20px #0059ff);
+}
+
+/* Transiciones personalizadas */
+.transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Espaciado personalizado */
+.section-spacing {
+    padding: 5rem 2rem;
+}
+
+@media (min-width: 768px) {
+    .section-spacing {
+        padding: 5rem 5rem;
+    }
+}
+
+/* Textos personalizados */
+.text-gradient-neon {
+    background: linear-gradient(45deg, #001aff, #0059ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Contenedor personalizado */
+.container-custom {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+@media (min-width: 768px) {
+    .container-custom {
+        padding: 0 5rem;
+    }
+}
+
+/* Layout del header con grid para reorganizar en móviles */
+header {
+    padding-top: 80px;
+    /* Espacio para navegación sticky */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    header {
+        padding-top: 100px;
+        /* Más espacio en desktop */
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0;
+    }
+}
+
+/* Reorganizar elementos en móviles: imagen arriba, botón abajo */
+header>div:first-child {
+    order: 2;
+    /* Imagen primero en móviles */
+}
+
+header>div:last-child {
+    order: 1;
+    /* Botón después de la imagen en móviles */
+}
+
+@media (min-width: 768px) {
+    header>div:first-child {
+        order: 1;
+        /* Mantener orden en desktop */
+    }
+
+    header>div:last-child {
+        order: 2;
+        /* Mantener orden en desktop */
+    }
+}
+
+/* Botón CTA responsive - 90% ancho en móviles */
+header button {
+    width: 90%;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    font-size: 0.75rem;
+    padding: 0.75rem 0.5rem;
+    white-space: normal;
+    line-height: 1.2;
+    word-wrap: break-word;
+}
+
+@media (min-width: 768px) {
+    header button {
+        width: auto;
+        text-align: left;
+        margin: 0;
+        display: inline-block;
+        font-size: 2rem;
+        padding: 1rem 2.5rem;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        line-height: normal;
+        word-wrap: normal;
+    }
+}
+
+/* Margen negativo personalizado para span del h1 */
+header h1 span {
+    margin-top: -8rem;
+    /* Reducir separación */
+}
+
+@media (min-width: 1280px) {
+    header h1 span {
+        margin-top: -2rem;
+        /* Menos negativo en pantallas grandes */
+    }
+}
+
+/* Centrar h1 en móviles */
+header h1 {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    header h1 {
+        text-align: left;
+        /* Alineación izquierda en desktop */
+    }
+}
+
+/* Mobile Menu - Corrección para columnas */
+#mobileMenu {
+    display: none;
+    /* Oculto por defecto */
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+
+}
+
+#mobileMenu:not(.hidden) {
+    display: flex;
+    /* Mostrar en columnas cuando no tiene clase hidden */
+}
+
+/* Asegurar que los elementos del menú estén en columna */
+#mobileMenu span {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0;
+}
+
+/* Navegación Responsive - Solución Corregida */
+.nav-menu-responsive {
+    display: none;
+    /* Oculto por defecto */
+}
+
+/* Solo mostrar menú en desktop (768px+) */
+@media (min-width: 768px) {
+    .nav-menu-responsive {
+        display: flex;
+        flex-direction: row;
+        gap: 2.5rem;
+    }
+}
+
+/* Ocultar botón móvil solo en desktop (768px+) */
+.mobile-menu-btn {
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .mobile-menu-btn {
+        display: none;
+    }
+}
+
+/* Layout de navegación responsive */
+.nav-layout-responsive {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    /* Para permitir que sticky funcione correctamente */
+}
+
+@media (min-width: 640px) {
+    .nav-layout-responsive {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem;
+    }
+}
+
+/* Controles derecha - Posición superior derecha en móviles */
+.nav-layout-responsive>div:last-child {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 10;
+}
+
+@media (min-width: 640px) {
+    .nav-layout-responsive>div:last-child {
+        position: static;
+        /* Restaurar posición normal en desktop */
+        top: auto;
+        right: auto;
+        z-index: auto;
+    }
+}
+
+/* Logo spacing responsive */
+@media (min-width: 640px) {
+    .logo-spacing {
+        margin-bottom: 0;
+    }
+}
+
+/* ============================================= */
+/* ESTILOS ESPECÍFICOS DE TIENDA - SIDEBAR TOGGLE */
+/* ============================================= */
+
+/* Transiciones: width para desktop, max-height para móvil */
+.sidebar-transition {
+    transition: width 0.35s ease-in-out,
+        max-height 0.35s ease-in-out,
+        opacity 0.3s ease,
+        padding 0.3s ease,
+        margin 0.3s ease;
+}
+
+/* Sidebar - permite transición de max-height en móvil */
+#sidebar {
+    overflow: hidden;
+    max-height: 3000px;
+}
+
+/* Estado oculto del sidebar */
+.sidebar-hidden {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+/* Móvil: colapso vertical con max-height */
+@media (max-width: 767px) {
+    #sidebar.sidebar-hidden {
+        max-height: 0 !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        border-color: transparent !important;
+    }
+}
+
+/* Desktop: colapso horizontal con width */
+@media (min-width: 768px) {
+    #sidebar.sidebar-hidden {
+        width: 0 !important;
+        min-width: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+
+/* Expansión del main cuando sidebar está oculto */
+.main-expanded {
+    width: 100% !important;
+}
+
+/* ============================================= */
+/* BARRA DE HERRAMIENTAS: FILTROS + BÚSQUEDA     */
+/* ============================================= */
+
+/* Botón de filtros en la toolbar */
+.filter-toggle-btn {
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(37, 99, 235, 0.45);
+    color: #ffffff;
+    transition: background 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    white-space: nowrap;
+}
+
+.filter-toggle-btn:hover {
+    background: rgba(37, 99, 235, 0.3);
+    border-color: rgba(37, 99, 235, 0.8);
+    box-shadow: 0 0 14px rgba(37, 99, 235, 0.35);
+}
+
+/* Estado activo (filtros abiertos) */
+.filter-toggle-btn.active {
+    background: rgba(37, 99, 235, 0.35);
+    border-color: #2563eb;
+    box-shadow: 0 0 18px rgba(37, 99, 235, 0.5);
+}
+
+/* Chevron del botón — rota 90° cuando los filtros están abiertos */
+.filter-btn-chevron {
+    transition: transform 0.3s ease;
+}
+
+.filter-btn-chevron.rotated {
+    transform: rotate(90deg);
+}
+
+
+
+/* ============================================= */
+/* ESTILOS DE TARJETAS DE PRODUCTOS - HOVER EFFECTS */
+/* ============================================= */
+
+/* Tarjeta de producto base con transición suave */
+.producto {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+/* Efecto hover principal - movimiento hacia arriba y sombra elevada */
+.producto:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 102, 204, 0.3);
+    border-color: #0066cc;
+}
+
+/* Efecto hover en imagen - zoom sutil */
+.producto:hover .producto_img img {
+    transform: scale(1.05);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Efecto hover en etiquetas - brillo sutil */
+.producto:hover .producto_etiquetas label {
+    filter: brightness(1.1);
+    transition: filter 0.3s ease;
+}
+
+/* Efecto hover en título - color destacado */
+.producto:hover .producto_descripcion h2 {
+    color: #0066cc;
+    transition: color 0.3s ease;
+}
+
+/* Efecto hover en precio - tamaño y brillo */
+.producto:hover .producto_descripcion span {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+    transition: all 0.3s ease;
+}
+
+/* Transición para imagen base */
+.producto .producto_img img {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Transición para etiquetas base */
+.producto .producto_etiquetas label {
+    transition: filter 0.3s ease;
+}
+
+/* Transición para título base */
+.producto .producto_descripcion h2 {
+    transition: color 0.3s ease;
+}
+
+/* Transición para precio base */
+.producto .producto_descripcion span {
+    transition: all 0.3s ease;
+}
+
+/* ============================================= */
+/* ESTILOS DE MODAL DE PRODUCTOS */
+/* ============================================= */
+
+/* Contenedor principal de la modal */
+#productoModal {
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Contenido de la modal */
+#productoModal .bg-gray-900 {
+    animation: modalSlideIn 0.3s ease-out;
+    border: 1px solid rgba(0, 102, 204, 0.3);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+/* Animación de entrada de la modal */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Botón cerrar modal */
+#cerrarModal {
+    transition: all 0.2s ease;
+}
+
+#cerrarModal:hover {
+    transform: scale(1.1);
+    color: #ff4444;
+}
+
+/* Imagen en modal */
+#modalImagen {
+    transition: transform 0.3s ease;
+    cursor: zoom-in;
+}
+
+#modalImagen:hover {
+    transform: scale(1.02);
+}
+
+/* Etiquetas en modal */
+#modalEtiquetas label {
+    transition: all 0.2s ease;
+}
+
+#modalEtiquetas label:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.2);
+}
+
+/* Botones de acción en modal */
+#productoModal button {
+    transition: all 0.2s ease;
+}
+
+#productoModal button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+#productoModal button:active {
+    transform: translateY(0);
+}
+
+/* Responsive para modal */
+@media (max-width: 768px) {
+    #productoModal .bg-gray-900 {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
+
+    #productoModal .grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+}
+
+/* ============================================= */
+/* ESTILOS DEL ASIDE - CATEGORÍAS DE TIENDA */
+/* ============================================= */
+
+/* Contenedor principal del aside */
+aside {
+    border-radius: 12px;
+    border: 1px solid rgba(0, 102, 204, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+}
+
+/* Navegación del sidebar */
+aside nav {
+    padding: 1rem;
+}
+
+/* Formulario de categorías */
+aside form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Fieldsets de categorías */
+aside fieldset {
+    border: 1px solid rgba(0, 102, 204, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    margin: 0;
+    margin-bottom: 0.1rem;
+    transition: all 0.3s ease;
+}
+
+aside fieldset:hover {
+    border-color: rgba(0, 102, 204, 0.6);
+    background: rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 102, 204, 0.2);
+}
+
+/* Fieldset con lista desplegada - agregar más separación */
+aside fieldset:has(.categoria-lista:not(.hidden)) {
+    margin-bottom: 1.5rem;
+}
+
+/* Legend de categorías */
+aside legend {
+    color: #0066cc;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0 0.5rem;
+    margin-bottom: 0.75rem;
+    text-shadow: 0 0 8px rgba(0, 102, 204, 0.5);
+}
+
+/* Lista de categorías */
+aside ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Items de categoría */
+aside li {
+    transition: all 0.2s ease;
+}
+
+/* Labels de categorías */
+aside label {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #e0e0e0;
+    font-size: 0.875rem;
+}
+
+aside label:hover {
+    background: rgba(0, 102, 204, 0.1);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+/* Checkboxes personalizados */
+aside input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 0.75rem;
+    accent-color: #0066cc;
+    cursor: pointer;
+}
+
+/* Efecto cuando checkbox está seleccionado */
+aside input[type="checkbox"]:checked+span {
+    color: #0066cc;
+    font-weight: 500;
+}
+
+aside input[type="checkbox"]:checked+span::before {
+    content: '✓ ';
+    color: #0066cc;
+    font-weight: bold;
+}
+
+/* Responsive para aside */
+@media (max-width: 768px) {
+    aside {
+        margin-bottom: 1rem;
+    }
+
+    aside nav {
+        padding: 1rem;
+    }
+
+    aside fieldset {
+        padding: 0.75rem;
+    }
+
+    aside legend {
+        font-size: 0.8rem;
+    }
+
+    aside label {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}

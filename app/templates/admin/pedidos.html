@@ -1,0 +1,360 @@
+{% extends "base.html" %}
+
+{% block title %}IA GAMA - Gestión de Pedidos{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <div class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Gestión de Pedidos</h1>
+                    <p class="text-sm text-gray-600">Administra los pedidos de los clientes</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{{ url_for('admin.dashboard') }}" 
+                       class="text-gray-600 hover:text-gray-900">
+                        ← Volver al Dashboard
+                    </a>
+                    <button onclick="exportarPedidos()" 
+                            class="btn-neon-success py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white">
+                        Exportar Pedidos
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex space-x-8">
+                <a href="{{ url_for('admin.dashboard') }}" 
+                   class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Dashboard
+                </a>
+                {% if session.user_rol == 'super_admin' %}
+                <a href="{{ url_for('admin.perfil') }}" 
+                   class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Perfil
+                </a>
+                {% endif %}
+                <a href="{{ url_for('admin.productos') }}" 
+                   class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Productos
+                </a>
+                <a href="{{ url_for('admin.pedidos') }}" 
+                   class="py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600">
+                    Pedidos
+                </a>
+                <a href="{{ url_for('admin.configuracion') }}" 
+                   class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Configuración
+                </a>
+                <a href="{{ url_for('admin.historial') }}" 
+                   class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Historial
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Estadísticas de Pedidos -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-yellow-500 rounded-md flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Pedidos Hoy</dt>
+                                <dd class="text-lg font-medium text-gray-900">0</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-blue-500 rounded-md flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Pendientes</dt>
+                                <dd class="text-lg font-medium text-gray-900">0</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-green-500 rounded-md flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Completados</dt>
+                                <dd class="text-lg font-medium text-gray-900">0</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white overflow-hidden shadow rounded-lg">
+                <div class="p-5">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <div class="w-8 h-8 bg-red-500 rounded-md flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="ml-5 w-0 flex-1">
+                            <dl>
+                                <dt class="text-sm font-medium text-gray-500 truncate">Cancelados</dt>
+                                <dd class="text-lg font-medium text-gray-900">0</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="bg-white shadow rounded-lg p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label for="pedido-busqueda" class="block text-sm font-medium text-gray-700">Buscar Pedido</label>
+                    <input type="text" id="pedido-busqueda" name="pedido-busqueda" placeholder="ID o cliente..."
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="pedido-estado" class="block text-sm font-medium text-gray-700">Estado</label>
+                    <select id="pedido-estado" name="pedido-estado" 
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">Todos</option>
+                        <option value="pendiente">Pendiente</option>
+                        <option value="procesando">Procesando</option>
+                        <option value="enviado">Enviado</option>
+                        <option value="completado">Completado</option>
+                        <option value="cancelado">Cancelado</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="pedido-fecha-inicio" class="block text-sm font-medium text-gray-700">Fecha Inicio</label>
+                    <input type="date" id="pedido-fecha-inicio" name="pedido-fecha-inicio"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="pedido-fecha-fin" class="block text-sm font-medium text-gray-700">Fecha Fin</label>
+                    <input type="date" id="pedido-fecha-fin" name="pedido-fecha-fin"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+            </div>
+        </div>
+
+        <!-- Lista de Pedidos -->
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Lista de Pedidos</h3>
+                    <span class="text-sm text-gray-500">Mostrando 0 pedidos</span>
+                </div>
+
+                <!-- Tabla de Pedidos -->
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Teléfono</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">WhatsApp</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            {% for pedido in pedidos %}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ pedido.id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ pedido.nombre_cliente }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ pedido.telefono_cliente }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">${{ "{:,.0f}".format(pedido.total).replace(",", ".") }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span id="estado-badge-{{ pedido.id }}"
+                                          class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                          {% if pedido.estado == 'borrador' %}bg-gray-100 text-gray-800
+                                          {% elif pedido.estado == 'pendiente' %}bg-yellow-100 text-yellow-800
+                                          {% elif pedido.estado == 'confirmado' %}bg-blue-100 text-blue-800
+                                          {% elif pedido.estado == 'entregado' %}bg-green-100 text-green-800
+                                          {% elif pedido.estado == 'cancelado' %}bg-red-100 text-red-800
+                                          {% endif %}">
+                                        {{ pedido.estado|capitalize }}
+                                    </span>
+                                    <select id="estado-select-{{ pedido.id }}"
+                                            onchange="cambiarEstado({{ pedido.id }}, this.value)"
+                                            class="text-gray-700 ml-2 text-sm border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
+                                        <option value="">Cambiar...</option>
+                                        <option value="borrador">Borrador</option>
+                                        <option value="pendiente">Pendiente</option>
+                                        <option value="confirmado">Confirmado</option>
+                                        <option value="entregado">Entregado</option>
+                                        <option value="cancelado">Cancelado</option>
+                                    </select>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    {% if pedido.whatsapp_enviado %}
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Enviado</span>
+                                    {% else %}
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">No enviado</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ pedido.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <button onclick="verDetalles({{ pedido.id }})"
+                                            class="text-blue-600 hover:text-blue-900 mr-3">Ver Detalles</button>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="8" class="px-6 py-12 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                                    </svg>
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900">No hay pedidos</h3>
+                                    <p class="mt-1 text-sm text-gray-500">Los pedidos aparecerán aquí cuando los clientes realicen compras.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function exportarPedidos() {
+    // Simulación de exportación
+    console.log('Exportando pedidos...');
+    alert('Función de exportación en desarrollo');
+}
+
+async function cambiarEstado(pedidoId, nuevoEstado) {
+    if (!nuevoEstado) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/admin/pedidos/${pedidoId}/estado`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({estado: nuevoEstado})
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Actualizar badge visualmente
+            const badge = document.getElementById(`estado-badge-${pedidoId}`);
+            const select = document.getElementById(`estado-select-${pedidoId}`);
+
+            // Colores según estado
+            const colores = {
+                'borrador': 'bg-gray-100 text-gray-800',
+                'pendiente': 'bg-yellow-100 text-yellow-800',
+                'confirmado': 'bg-blue-100 text-blue-800',
+                'entregado': 'bg-green-100 text-green-800',
+                'cancelado': 'bg-red-100 text-red-800'
+            };
+
+            // Remover todas las clases de color
+            badge.className = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full';
+            // Agregar nueva clase de color
+            badge.classList.add(...colores[nuevoEstado].split(' '));
+            // Actualizar texto
+            badge.textContent = nuevoEstado.charAt(0).toUpperCase() + nuevoEstado.slice(1);
+
+            // Resetear select
+            select.value = '';
+
+            alert('Estado actualizado exitosamente');
+        } else {
+            alert('Error: ' + data.message);
+            // Recargar para revertir el cambio
+            location.reload();
+        }
+    } catch (error) {
+        console.error('Error al cambiar estado:', error);
+        alert('Error al cambiar el estado');
+        location.reload();
+    }
+}
+
+async function verDetalles(pedidoId) {
+    try {
+        const response = await fetch(`/admin/pedidos/${pedidoId}/detalles`);
+        const data = await response.json();
+
+        if (data.success) {
+            const pedido = data.pedido;
+            const detalles = data.detalles;
+
+            let mensaje = `Pedido #${pedido.id}\n`;
+            mensaje += `Cliente: ${pedido.nombre_cliente}\n`;
+            mensaje += `Teléfono: ${pedido.telefono_cliente}\n`;
+            mensaje += `Estado: ${pedido.estado}\n`;
+            mensaje += `Total: $${pedido.total}\n\n`;
+            mensaje += `Productos:\n`;
+
+            detalles.forEach(detalle => {
+                mensaje += `- ${detalle.producto_nombre}\n`;
+                mensaje += `  Cantidad: ${detalle.cantidad}\n`;
+                mensaje += `  Precio unitario: $${detalle.precio_unitario}\n`;
+                mensaje += `  Subtotal: $${detalle.subtotal}\n`;
+            });
+
+            if (pedido.notas) {
+                mensaje += `\nNotas: ${pedido.notas}`;
+            }
+
+            alert(mensaje);
+        } else {
+            alert('Error: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error al obtener detalles:', error);
+        alert('Error al obtener los detalles del pedido');
+    }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "usuarios/base_usuarios.html" %}
+
+{% block page_title %}Mi Perfil{% endblock %}
+
+{% block header_title %}Mi Perfil{% endblock %}
+
+{% block header_description %}Gestiona tu información personal y preferencias{% endblock %}
+
+{% block usuarios_content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Información del perfil -->
+    <div class="lg:col-span-2">
+        <h2 class="text-xl font-semibold text-gray-900 mb-6">Información Personal</h2>
+
+        <form class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-700">
+                        Nombre completo
+                    </label>
+                    <input type="text" id="nombre" name="nombre" value="{{ user.nombre if user else '' }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700">
+                        Correo electrónico
+                    </label>
+                    <input type="email" id="email" name="email" value="{{ user.email if user else '' }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="telefono" class="block text-sm font-medium text-gray-700">
+                        Teléfono
+                    </label>
+                    <input type="tel" id="telefono" name="telefono" value="{{ user.telefono if user else '' }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+
+                <div>
+                    <label for="fecha_nacimiento" class="block text-sm font-medium text-gray-700">
+                        Fecha de nacimiento
+                    </label>
+                    <input type="date" id="fecha_nacimiento" name="fecha_nacimiento"
+                        value="{{ user.fecha_nacimiento if user else '' }}"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+            </div>
+
+            <div>
+                <label for="direccion" class="block text-sm font-medium text-gray-700">
+                    Dirección
+                </label>
+                <textarea id="direccion" name="direccion" rows="3"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">{{ user.direccion if user else '' }}</textarea>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="submit"
+                    class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Guardar cambios
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Foto de perfil y estadísticas -->
+    <div class="space-y-6">
+        <!-- Foto de perfil -->
+        <div class="text-center">
+            <img class="mx-auto h-32 w-32 rounded-full" src="{{ url_for('static', filename='img/default-avatar.png') }}"
+                alt="Foto de perfil">
+            <h3 class="mt-4 text-lg font-medium text-gray-900">{{ user.nombre if user else 'Usuario' }}</h3>
+            <p class="text-sm text-gray-500">Miembro desde {{ user.fecha_registro if user else 'N/A' }}</p>
+
+            <button type="button"
+                class="mt-4 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Cambiar foto
+            </button>
+        </div>
+
+        <!-- Estadísticas -->
+        <div class="bg-gray-50 rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Estadísticas</h3>
+            <div class="space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-sm text-gray-600">Total de compras</span>
+                    <span class="text-sm font-medium text-gray-900">{{ stats.total_compras if stats else 0 }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm text-gray-600">Total gastado</span>
+                    <span class="text-sm font-medium text-gray-900">${{ stats.total_gastado if stats else '0.00'
+                        }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-sm text-gray-600">Productos favoritos</span>
+                    <span class="text-sm font-medium text-gray-900">{{ stats.favoritos if stats else 0 }}</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="space-y-3">
+            <button type="button"
+                class="w-full text-left px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Ver historial de compras
+            </button>
+            <button type="button"
+                class="w-full text-left px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50">
+                Productos favoritos
+            </button>
+            <button type="button"
+                class="w-full text-left px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-red-600 hover:bg-red-50">
+                Cerrar sesión
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}IA GAMA - {% block page_title %}Usuarios{% endblock %}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header de la sección de usuarios -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            {% block header_title %}Gestión de Usuarios{% endblock %}
+        </h1>
+        <p class="text-gray-600">
+            {% block header_description %}Gestiona tu cuenta y preferencias{% endblock %}
+        </p>
+    </div>
+
+    <!-- Navegación interna de usuarios -->
+    <nav class="bg-white rounded-lg shadow-md p-4 mb-8">
+        <div class="flex flex-wrap gap-4">
+            <a href="{{ url_for('users.perfil') }}"
+                class="px-4 py-2 rounded-md text-sm font-medium transition-colors
+                      {% if request.endpoint == 'users.perfil' %}btn-neon text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                Perfil
+            </a>
+            <a href="{{ url_for('users.configuracion') }}"
+                class="px-4 py-2 rounded-md text-sm font-medium transition-colors
+                      {% if request.endpoint == 'users.configuracion' %}btn-neon text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                Configuración
+            </a>
+            <a href="{{ url_for('users.historial') }}"
+                class="px-4 py-2 rounded-md text-sm font-medium transition-colors
+                      {% if request.endpoint == 'users.historial' %}btn-neon text-white{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+                Historial
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="bg-white rounded-lg shadow-md p-6">
+        {% block usuarios_content %}
+        <!-- El contenido específico de cada página irá aquí -->
+        {% endblock %}
+    </main>
+</div>
+{% endblock %}

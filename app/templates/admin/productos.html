@@ -1,0 +1,693 @@
+{% extends "base.html" %}
+
+{% block title %}IA GAMA - Gestión de Productos{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <div class="bg-white shadow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Gestión de Productos</h1>
+                    <p class="text-sm text-gray-600">Administra el catálogo de productos</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="{{ url_for('admin.dashboard') }}" class="text-gray-600 hover:text-gray-900">
+                        ← Volver al Dashboard
+                    </a>
+                    <button onclick="openCategoriaModal()"
+                        class="btn-neon-success py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white">
+                        Nueva Categoría
+                    </button>
+                    <button onclick="openModal()"
+                        class="btn-neon py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white">
+                        Nuevo Producto
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="bg-white border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <nav class="flex space-x-8">
+                <a href="{{ url_for('admin.dashboard') }}"
+                    class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Dashboard
+                </a>
+                {% if session.user_rol == 'super_admin' %}
+                <a href="{{ url_for('admin.perfil') }}"
+                    class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Perfil
+                </a>
+                {% endif %}
+                <a href="{{ url_for('admin.productos') }}"
+                    class="py-4 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600">
+                    Productos
+                </a>
+                <a href="{{ url_for('admin.configuracion') }}"
+                    class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Configuración
+                </a>
+                <a href="{{ url_for('admin.historial') }}"
+                    class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                    Historial
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-gray-700">
+        <!-- Filtros y Búsqueda -->
+        <section class="bg-white shadow rounded-lg p-6 mb-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label for="busqueda" class="block text-sm font-medium text-gray-700">Buscar</label>
+                    <input type="text" id="busqueda" name="busqueda" placeholder="Nombre del producto..."
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="categoria" class="block text-sm font-medium text-gray-700">Categoría</label>
+                    <select id="categoria" name="categoria"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">Todas</option>
+                        <!-- Las categorías se cargarán dinámicamente -->
+                    </select>
+                </div>
+                <div>
+                    <label for="estado" class="block text-sm font-medium text-gray-700">Estado</label>
+                    <select id="estado" name="estado"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">Todos</option>
+                        <option value="activo">Activo</option>
+                        <option value="inactivo">Inactivo</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button type="button" onclick="aplicarFiltros()"
+                        class="w-full btn-neon py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white">
+                        Filtrar
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lista de Productos -->
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg leading-6 font-medium text-gray-900">Catálogo de Productos</h3>
+                    <span class="text-sm text-gray-500">Mostrando {{ productos|length }} de {{ total }} productos</span>
+                </div>
+
+
+
+                    <!-- Contenido Principal -->
+                    <main class="flex-1">
+                        <!-- Tabla de Productos -->
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Categoría</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Precio</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Entrega</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    {% if productos %}
+                                        {% for producto in productos %}
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{{ producto.id }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ producto.nombre }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ producto.categoria_nombre|default('Sin categoría') }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">${{ "{:,.0f}".format(producto.precio).replace(",", ".") }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                                {% if producto.tipo_entrega == 'inmediata' %}
+                                                <span class="text-green-600">Inmediata</span>
+                                                {% else %}
+                                                <span class="text-orange-600">Por Encargo</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {% if producto.estado_stock == 'agotado' %}
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Agotado</span>
+                                                {% else %}
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Disponible</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                <div class="flex gap-1">
+                                                    {% if producto.es_destacado %}
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Destacado</span>
+                                                    {% endif %}
+                                                    {% if not producto.activo %}
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Inactivo</span>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <button onclick="editarProducto({{ producto.id }})"
+                                                    class="btn-neon text-white py-1 px-3 rounded-md text-xs font-medium mr-2">
+                                                    Editar
+                                                </button>
+                                                <button onclick="eliminarProducto({{ producto.id }})"
+                                                    class="btn-neon-danger text-white py-1 px-3 rounded-md text-xs font-medium">
+                                                    Eliminar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="8" class="px-6 py-12 text-center">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                            </svg>
+                                            <h3 class="mt-2 text-sm font-medium text-gray-900">No hay productos</h3>
+                                            <p class="mt-1 text-sm text-gray-500">Comienza agregando productos al catálogo.</p>
+                                            <div class="mt-6">
+                                                <button onclick="openModal()"
+                                                    class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                                                    Agregar Producto
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Paginación -->
+                        {% if total_pages > 1 %}
+                        <div class="flex items-center justify-between mt-6">
+                            <div class="text-sm text-gray-500">
+                                Página {{ page }} de {{ total_pages }}
+                            </div>
+                            <div class="flex gap-2">
+                                {% if page > 1 %}
+                                <button onclick="cambiarPagina({{ page - 1 }})"
+                                    class="btn-neon-neutral text-white py-1 px-3 rounded-md text-sm font-medium">
+                                    Anterior
+                                </button>
+                                {% endif %}
+
+                                {% for p in range(1, total_pages + 1) %}
+                                    {% if p == page %}
+                                    <button class="btn-neon text-white py-1 px-3 rounded-md text-sm font-medium">
+                                        {{ p }}
+                                    </button>
+                                    {% elif p <= 3 or p >= total_pages - 2 or (p >= page - 1 and p <= page + 1) %}
+                                    <button onclick="cambiarPagina({{ p }})"
+                                        class="bg-white text-gray-700 py-1 px-3 rounded-md text-sm font-medium hover:bg-gray-100">
+                                        {{ p }}
+                                    </button>
+                                    {% elif p == 4 or p == total_pages - 3 %}
+                                    <span class="text-gray-500 py-1 px-2">...</span>
+                                    {% endif %}
+                                {% endfor %}
+
+                                {% if page < total_pages %}
+                                <button onclick="cambiarPagina({{ page + 1 }})"
+                                    class="btn-neon-neutral text-white py-1 px-3 rounded-md text-sm font-medium">
+                                    Siguiente
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Nueva Categoría -->
+<div id="categoriaModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full text-gray-700 hidden">
+    <div class="relative top-20 mx-auto p-5 border w-[500px] shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <h3 class="text-lg leading-6 font-medium text-gray-900">Nueva Categoría</h3>
+            <form id="categoriaForm" class="mt-4 space-y-4">
+                <div>
+                    <label for="categoria-nombre" class="block text-sm font-medium text-gray-700">Nombre <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" id="categoria-nombre" name="nombre" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="Nombre de la categoría">
+                </div>
+                <div>
+                    <label for="categoria-descripcion"
+                        class="block text-sm font-medium text-gray-700">Descripción</label>
+                    <textarea id="categoria-descripcion" name="descripcion" rows="3"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="Descripción de la categoría"></textarea>
+                </div>
+                <div>
+                    <label for="categoria-padre" class="block text-sm font-medium text-gray-700">Categoría Padre
+                        (Subcategoría)</label>
+                    <select id="categoria-padre" name="categoria_padre_id"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">Ninguna (Categoría Principal)</option>
+                        <!-- Las categorías se cargarán dinámicamente desde la BD -->
+                    </select>
+                    <p class="mt-1 text-xs text-gray-500">Selecciona una categoría padre para crear una subcategoría</p>
+                </div>
+                <div>
+                    <label for="categoria-imagen" class="block text-sm font-medium text-gray-700">Imagen (formato
+                        webp)</label>
+                    <input type="file" id="categoria-imagen" name="imagen" accept=".webp"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <p class="mt-1 text-xs text-gray-500">Solo archivos .webp</p>
+                </div>
+                <div>
+                    <label class="flex items-center">
+                        <input type="checkbox" id="categoria-activa" name="activa" checked
+                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-700">Categoría Activa</span>
+                    </label>
+                </div>
+            </form>
+            <div class="items-center px-4 py-3 flex justify-end space-x-2">
+                <button onclick="closeCategoriaModal()"
+                    class="px-4 py-2 btn-neon-neutral text-white rounded-md">Cancelar</button>
+                <button onclick="saveCategoria()"
+                    class="px-4 py-2 btn-neon-success text-white rounded-md">Guardar Categoría</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Nuevo Producto -->
+<div id="productoModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden text-gray-700">
+    <div class="relative top-20 mx-auto p-5 border w-[600px] shadow-lg rounded-md bg-white">
+        <div class="mt-3">
+            <h3 id="modalTitle" class="text-lg leading-6 font-medium text-gray-900">Nuevo Producto</h3>
+            <form id="productoForm" class="mt-4 space-y-4">
+                <input type="hidden" id="producto-id" name="producto_id">
+                <div>
+                    <label for="producto-nombre" class="block text-sm font-medium text-gray-700">Nombre <span
+                            class="text-red-500">*</span></label>
+                    <input type="text" id="producto-nombre" name="nombre" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="Nombre del producto">
+                </div>
+                <div>
+                    <label for="producto-categoria" class="block text-sm font-medium text-gray-700">Categoría <span
+                            class="text-red-500">*</span></label>
+                    <select id="producto-categoria" name="categoria_id" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        <option value="">Selecciona una categoría</option>
+                        <!-- Las categorías se cargarán dinámicamente desde la BD -->
+                    </select>
+                </div>
+                <div>
+                    <label for="producto-precio" class="block text-sm font-medium text-gray-700">Precio <span
+                            class="text-red-500">*</span></label>
+                    <input type="number" id="producto-precio" name="precio" step="0.01" required
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="0.00">
+                </div>
+                <div>
+                    <label for="producto-imagen" class="block text-sm font-medium text-gray-700">Imagen Principal
+                        (formato webp)</label>
+                    <input type="file" id="producto-imagen" name="imagen_principal" accept=".webp"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    <p class="mt-1 text-xs text-gray-500">Solo archivos .webp</p>
+                </div>
+                <div>
+                    <label for="producto-descripcion"
+                        class="block text-sm font-medium text-gray-700">Descripción</label>
+                    <textarea id="producto-descripcion" name="descripcion" rows="3"
+                        class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="Descripción del producto"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="producto-tipo-entrega" class="block text-sm font-medium text-gray-700">Tipo de
+                            Entrega <span class="text-red-500">*</span></label>
+                        <select id="producto-tipo-entrega" name="tipo_entrega" required
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="inmediata">Inmediata</option>
+                            <option value="por_encargo">Por Encargo</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="producto-estado-stock" class="block text-sm font-medium text-gray-700">Estado de
+                            Stock <span class="text-red-500">*</span></label>
+                        <select id="producto-estado-stock" name="estado_stock" required
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option value="disponible">Disponible</option>
+                            <option value="agotado">Agotado</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="producto-destacado" name="es_destacado"
+                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-700">Producto Destacado</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" id="producto-activo" name="activo" checked
+                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-700">Producto Activo</span>
+                    </label>
+                </div>
+            </form>
+            <div class="items-center px-4 py-3 flex justify-end space-x-2">
+                <button onclick="closeModal()"
+                    class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Cancelar</button>
+                <button onclick="saveProducto()"
+                    class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Guardar Producto</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById('productoModal').classList.remove('hidden');
+        // Cargar categorías en el select
+        cargarCategoriasProducto();
+    }
+
+    function closeModal() {
+        document.getElementById('productoModal').classList.add('hidden');
+        // Limpiar formulario
+        document.getElementById('productoForm').reset();
+        // Resetear campo oculto de ID
+        document.getElementById('producto-id').value = '';
+        // Resetear título del modal
+        document.getElementById('modalTitle').textContent = 'Nuevo Producto';
+    }
+
+    function editarProducto(productoId) {
+        // Cargar datos del producto desde el servidor
+        fetch(`/admin/productos/${productoId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const producto = data.producto;
+                    
+                    // Llenar el formulario con los datos del producto
+                    document.getElementById('producto-id').value = producto.id;
+                    document.getElementById('producto-nombre').value = producto.nombre;
+                    document.getElementById('producto-precio').value = producto.precio;
+                    document.getElementById('producto-descripcion').value = producto.descripcion || '';
+                    document.getElementById('producto-tipo-entrega').value = producto.tipo_entrega;
+                    document.getElementById('producto-estado-stock').value = producto.estado_stock;
+                    document.getElementById('producto-destacado').checked = producto.es_destacado;
+                    document.getElementById('producto-activo').checked = producto.activo;
+                    
+                    // Cambiar título del modal
+                    document.getElementById('modalTitle').textContent = 'Editar Producto';
+                    
+                    // Cargar categorías y seleccionar la categoría del producto
+                    cargarCategoriasProducto().then(() => {
+                        document.getElementById('producto-categoria').value = producto.categoria_id;
+                    });
+                    
+                    // Mostrar el modal
+                    document.getElementById('productoModal').classList.remove('hidden');
+                } else {
+                    alert('Error al cargar el producto: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar producto:', error);
+                alert('Error al cargar el producto');
+            });
+    }
+
+    function cargarCategoriasProducto() {
+        // Cargar categorías desde la base de datos
+        const selectCategoria = document.getElementById('producto-categoria');
+        selectCategoria.innerHTML = '<option value="">Selecciona una categoría</option>';
+
+        return fetch('/admin/categorias/listar')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    data.categorias.forEach(cat => {
+                        const option = document.createElement('option');
+                        option.value = cat.id;
+                        // Mostrar nombre con indentación si es subcategoría
+                        const indent = cat.categoria_padre_id ? '↳ ' : '';
+                        option.textContent = indent + cat.nombre;
+                        selectCategoria.appendChild(option);
+                    });
+                } else {
+                    console.error('Error al cargar categorías:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar categorías:', error);
+            });
+    }
+
+    function openCategoriaModal() {
+        document.getElementById('categoriaModal').classList.remove('hidden');
+        // Cargar categorías existentes para el select de categoría padre
+        cargarCategoriasPadre();
+    }
+
+    function closeCategoriaModal() {
+        document.getElementById('categoriaModal').classList.add('hidden');
+        // Limpiar formulario
+        document.getElementById('categoriaForm').reset();
+    }
+
+    function cargarCategoriasPadre() {
+        // Cargar categorías desde la base de datos
+        const selectPadre = document.getElementById('categoria-padre');
+        selectPadre.innerHTML = '<option value="">Ninguna (Categoría Principal)</option>';
+
+        fetch('/admin/categorias/listar')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Solo mostrar categorías principales (sin categoría padre)
+                    const categoriasPrincipales = data.categorias.filter(cat => !cat.categoria_padre_id);
+
+                    categoriasPrincipales.forEach(cat => {
+                        const option = document.createElement('option');
+                        option.value = cat.id;
+                        option.textContent = cat.nombre;
+                        selectPadre.appendChild(option);
+                    });
+                } else {
+                    console.error('Error al cargar categorías:', data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar categorías:', error);
+            });
+    }
+
+    function saveCategoria() {
+        const form = document.getElementById('categoriaForm');
+        const formData = new FormData(form);
+
+        const nombre = formData.get('nombre');
+        const descripcion = formData.get('descripcion');
+        const categoriaPadreId = formData.get('categoria_padre_id');
+        const imagen = formData.get('imagen');
+        const activa = formData.get('activa') === 'on';
+
+        // Validación
+        if (!nombre) {
+            alert('Por favor, ingresa el nombre de la categoría');
+            return;
+        }
+
+        // Validar formato de imagen si se proporciona
+        if (imagen && imagen.size > 0) {
+            if (!imagen.name.toLowerCase().endsWith('.webp')) {
+                alert('La imagen debe estar en formato webp');
+                return;
+            }
+        }
+
+        // Enviar datos al servidor usando FormData
+        fetch('/admin/categorias/crear', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Categoría creada exitosamente');
+                    closeCategoriaModal();
+                    // Recargar la página para actualizar la lista de categorías
+                    location.reload();
+                } else {
+                    alert('Error al crear la categoría: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al crear la categoría');
+            });
+    }
+
+    function saveProducto() {
+        const form = document.getElementById('productoForm');
+        const formData = new FormData(form);
+
+        const productoId = formData.get('producto_id');
+        const nombre = formData.get('nombre');
+        const categoriaId = formData.get('categoria_id');
+        const precio = formData.get('precio');
+        const imagenPrincipal = formData.get('imagen_principal');
+        const descripcion = formData.get('descripcion');
+        const tipoEntrega = formData.get('tipo_entrega');
+        const estadoStock = formData.get('estado_stock');
+        const esDestacado = formData.get('es_destacado') === 'on';
+        const activo = formData.get('activo') === 'on';
+
+        // Validación
+        if (!nombre || !categoriaId || !precio || !tipoEntrega || !estadoStock) {
+            alert('Por favor, completa todos los campos obligatorios');
+            return;
+        }
+
+        // Validar formato de imagen si se proporciona
+        if (imagenPrincipal && imagenPrincipal.size > 0) {
+            if (!imagenPrincipal.name.toLowerCase().endsWith('.webp')) {
+                alert('La imagen debe estar en formato webp');
+                return;
+            }
+        }
+
+        // Determinar si es creación o edición
+        const esEdicion = productoId && productoId !== '';
+        const url = esEdicion ? `/admin/productos/${productoId}` : '/admin/productos/crear';
+        const method = esEdicion ? 'PUT' : 'POST';
+
+        // Enviar datos al servidor usando FormData
+        fetch(url, {
+            method: method,
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(esEdicion ? 'Producto actualizado exitosamente' : 'Producto creado exitosamente');
+                    closeModal();
+                    // Recargar la página para actualizar la lista de productos
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al guardar el producto');
+            });
+    }
+
+    function eliminarProducto(productoId) {
+        // Confirmar eliminación
+        if (!confirm('¿Estás seguro de que deseas eliminar este producto? Esta acción no se puede deshacer.')) {
+            return;
+        }
+
+        fetch(`/admin/productos/${productoId}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Producto eliminado exitosamente');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error al eliminar producto:', error);
+                alert('Error al eliminar el producto');
+            });
+    }
+
+    // Funciones de filtrado y paginación
+    function cargarCategoriasFiltro() {
+        const selectCategoria = document.getElementById('categoria');
+        selectCategoria.innerHTML = '<option value="">Todas</option>';
+
+        fetch('/admin/categorias/listar')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    data.categorias.forEach(cat => {
+                        const option = document.createElement('option');
+                        option.value = cat.nombre;
+                        const indent = cat.categoria_padre_id ? '↳ ' : '';
+                        option.textContent = indent + cat.nombre;
+                        selectCategoria.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar categorías:', error);
+            });
+    }
+
+    function aplicarFiltros() {
+        const busqueda = document.getElementById('busqueda').value;
+        const categoria = document.getElementById('categoria').value;
+        const estado = document.getElementById('estado').value;
+
+        const params = new URLSearchParams();
+        if (busqueda) params.append('busqueda', busqueda);
+        if (categoria) params.append('categoria', categoria);
+        if (estado) params.append('estado', estado);
+        params.append('page', '1');
+
+        window.location.href = `/admin/productos?${params.toString()}`;
+    }
+
+    function cambiarPagina(pagina) {
+        const busqueda = document.getElementById('busqueda').value;
+        const categoria = document.getElementById('categoria').value;
+        const estado = document.getElementById('estado').value;
+
+        const params = new URLSearchParams();
+        if (busqueda) params.append('busqueda', busqueda);
+        if (categoria) params.append('categoria', categoria);
+        if (estado) params.append('estado', estado);
+        params.append('page', pagina);
+
+        window.location.href = `/admin/productos?${params.toString()}`;
+    }
+
+    // Cargar categorías al iniciar la página
+    document.addEventListener('DOMContentLoaded', function() {
+        cargarCategoriasFiltro();
+
+        // Mantener valores de filtros
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('busqueda')) {
+            document.getElementById('busqueda').value = urlParams.get('busqueda');
+        }
+        if (urlParams.get('categoria')) {
+            document.getElementById('categoria').value = urlParams.get('categoria');
+        }
+        if (urlParams.get('estado')) {
+            document.getElementById('estado').value = urlParams.get('estado');
+        }
+    });
+</script>
+{% endblock %}

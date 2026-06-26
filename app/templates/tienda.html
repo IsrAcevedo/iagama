@@ -1,0 +1,400 @@
+{% extends 'base.html' %}
+
+{% block title %}Tienda - IAGAMA{% endblock %}
+
+{% block content %}
+<div class="min-h-screen px-4 md:px-10 pt-4">
+
+    <!-- Fila superior: Título izquierda + Usuario/Carrito derecha -->
+    <div class="flex justify-between items-center mb-1">
+        <!-- Título -->
+        <h1 class="text-xl md:text-4xl font-extrabold">
+            Nuestra <span class="neon-blue">Tienda</span>
+        </h1>
+
+        <!-- Usuario y Carrito -->
+        <div class="flex items-center gap-4 md:gap-8">
+            <!-- Usuario -->
+            <div class="flex items-center space-x-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+                    class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                </svg>
+                <p class="text-sm hidden sm:block">{{cliente or "Invitado"}}</p>
+            </div>
+
+            <!-- Carrito -->
+            <a href="{{url_for('main.checkout')}}" target="_blank">
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor"
+                        class="bi bi-cart" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                    </svg>
+                    <p class="text-sm hidden sm:block">carrito</p>
+                    <div
+                        class="carrito_cantidad btn-neon text-white rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                        <p id="carrito_cantidad">{{ carrito|length }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Subtítulo -->
+    <p class="text-gray-400 text-xs md:text-sm mb-4">
+        Accesorios y dispositivos de alta calidad para potenciar tu día a día.
+    </p>
+
+    <!-- Barra de herramientas: Filtros + Búsqueda -->
+    <div class="tienda-toolbar flex items-center gap-3 mb-6">
+
+        <!-- Botón filtros (toggle aside) -->
+        <button id="toggle-sidebar"
+            class="filter-toggle-btn flex items-center gap-2 px-4 py-2 rounded-lg text-white text-sm font-semibold shrink-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                <path
+                    d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5v-2z" />
+            </svg>
+            <span>Filtros</span>
+            <svg id="toggle-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                viewBox="0 0 16 16" class="filter-btn-chevron transition-transform duration-300">
+                <path fill-rule="evenodd"
+                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z" />
+            </svg>
+        </button>
+
+        <!-- Barra de búsqueda -->
+        <form class="flex-1" method="GET" action="{{ url_for('main.tienda') }}">
+            <div class="relative flex items-center">
+                <input type="search" name="busqueda" placeholder="Buscar producto"
+                    value="{{ request.args.get('busqueda', '') }}"
+                    class="w-full pl-4 pr-12 py-2 border border-gray-700 rounded-lg bg-gray-900 text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none">
+                <button type="submit"
+                    class="absolute right-0 top-0 h-full px-3 text-gray-400 hover:text-blue-400 transition flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-search" viewBox="0 0 16 16">
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="container_tienda flex flex-col md:flex-row gap-6">
+        <aside id="sidebar" class="w-full md:w-[20%] sidebar-transition sidebar-hidden">
+            <!-- Categorias -->
+            <nav class="sidebar navbar" id="navbar">
+                <h3 class="text-white font-semibold mb-4 text-sm md:text-base">Filtrar por categorías</h3>
+
+                <form>
+
+                    {%for categoria in categorias%}
+                    <fieldset class="categoria-fieldset border-none">
+                        <legend class="cursor-pointer font-semibold text-white hover:text-blue-400 transition-colors"
+                            onclick="toggleCategoria(this)">
+                            {{categoria.nombre}}
+                            <span class="toggle-icon ml-2 text-xs">▼</span>
+                        </legend>
+
+                        <ul class="categoria-lista hidden">
+                            {% for subcategoria in categoria.hijas%}
+                            <li>
+                                <label>
+                                    <input type="checkbox" name="categoria" value="{{subcategoria.id}}" {% if
+                                        subcategoria.id|string in categorias_filtro %}checked{% endif %}
+                                        onchange="aplicarFiltros()">
+                                    <span>{{subcategoria.nombre}}</span>
+                                </label>
+                            </li>
+                            {%endfor%}
+                        </ul>
+                    </fieldset>
+
+                    {%endfor%}
+                </form>
+            </nav>
+        </aside>
+        <main id="main-content" class="w-full md:w-[80%] sidebar-transition main-expanded">
+            <!-- Grid de Productos -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
+                {% for producto in productos %}
+                <!-- Producto -->
+                <div class="producto bg-gray-900 rounded-lg border border-gray-700 overflow-hidden hover:border-[#001aff] transition cursor-pointer"
+                    data-producto='{{ producto|tojson|safe }}' onclick="abrirModalProducto(this)">
+                    <div class="producto_img aspect-square overflow-hidden">
+                        <img src="{{ url_for('static', filename='productos/' + producto.imagen_principal) }}"
+                            alt="{{producto.nombre}}" class="w-full h-full object-cover" loading="lazy">
+                    </div>
+                    <div class="producto_etiquetas p-3 flex flex-wrap gap-2">
+                        {%if producto.tipo_entrega == 'inmediata'%}
+                        <label class="bg-green-600 text-white text-xs px-2 py-1 rounded">Entrega Inmediata</label>
+                        {%else%}
+                        <label class="bg-red-600 text-white text-xs px-2 py-1 rounded capitalize">producto bajo
+                            pedido</label>
+                        {%endif%}
+
+                    </div>
+                    <div class="producto_descripcion p-4">
+                        <h2 class="text-lg font-semibold mb-2">{{producto.nombre}}</h2>
+                        <p class="text-gray-300">precio <span class=" text-xl font-bold text-red-500">${{
+                                "{:,.0f}".format(producto.precio).replace(",", ".") }}</span>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Paginación -->
+            {% if total_pages > 1 %}
+            <div class="flex items-center justify-center mt-8 gap-2">
+                {% if page > 1 %}
+                <button onclick="cambiarPagina({{ page - 1 }})"
+                    class="btn-neon-neutral text-white py-2 px-4 rounded-md text-sm font-medium">
+                    Anterior
+                </button>
+                {% endif %}
+
+                {% for p in range(1, total_pages + 1) %}
+                    {% if p == page %}
+                    <button class="btn-neon text-white py-2 px-4 rounded-md text-sm font-medium">
+                        {{ p }}
+                    </button>
+                    {% elif p <= 3 or p >= total_pages - 2 or (p >= page - 1 and p <= page + 1) %}
+                    <button onclick="cambiarPagina({{ p }})"
+                        class="bg-gray-800 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-gray-700">
+                        {{ p }}
+                    </button>
+                    {% elif p == 4 or p == total_pages - 3 %}
+                    <span class="text-gray-400 py-2 px-2">...</span>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page < total_pages %}
+                <button onclick="cambiarPagina({{ page + 1 }})"
+                    class="btn-neon-neutral text-white py-2 px-4 rounded-md text-sm font-medium">
+                    Siguiente
+                </button>
+                {% endif %}
+            </div>
+            {% endif %}
+        </main>
+    </div>
+
+    <!-- Botón flotante eliminado: ahora el toggle está en la barra superior -->
+
+    <!-- Scripts separados -->
+    <script src="{{ url_for('static', filename='js/sidebar-toggle.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/carrito.js') }}"></script>
+
+    <script>
+        // Variable global para almacenar el producto actual del modal
+        let productoActual = null;
+
+        // Función para abrir el modal con los datos del producto
+        function abrirModalProducto(elemento) {
+            console.log('abrirModalProducto llamado');
+            // Obtener los datos del producto del data attribute
+            const productoData = elemento.getAttribute('data-producto');
+            console.log('Datos del producto:', productoData);
+
+            if (!productoData) {
+                console.error('No se encontraron datos del producto');
+                return;
+            }
+
+            const producto = JSON.parse(productoData);
+            console.log('Producto parseado:', producto);
+
+            // Almacenar producto actual en variable global
+            productoActual = producto;
+
+            // Construir la URL de la imagen
+            const imagenUrl = producto.imagen_principal ?
+                '{{ url_for("static", filename="productos/") }}' + producto.imagen_principal :
+                '';
+
+            // Llenar el modal con los datos del producto
+            document.getElementById('modalImagen').src = imagenUrl;
+            document.getElementById('modalImagen').alt = producto.nombre;
+            document.getElementById('modalTitulo').textContent = producto.nombre;
+            document.getElementById('modalDescripcion').textContent = producto.descripcion || 'Sin descripción';
+            document.getElementById('modalPrecio').textContent = '$' + Number(producto.precio).toLocaleString('es-CO');
+
+            // Generar etiquetas dinámicamente
+            const etiquetasContainer = document.getElementById('modalEtiquetas');
+            etiquetasContainer.innerHTML = '';
+
+            // Etiqueta de tipo de entrega
+            if (producto.tipo_entrega === 'inmediata') {
+                const etiqueta1 = document.createElement('span');
+                etiqueta1.className = 'bg-green-600 text-white text-xs px-2 py-1 rounded';
+                etiqueta1.textContent = 'Entrega Inmediata';
+                etiquetasContainer.appendChild(etiqueta1);
+
+
+            } else {
+                const etiqueta = document.createElement('span');
+                etiqueta.className = 'bg-red-600 text-white text-xs px-2 py-1 rounded';
+                etiqueta.textContent = 'Producto Bajo Pedido';
+                etiquetasContainer.appendChild(etiqueta);
+            }
+
+            // Mostrar el modal
+            const modal = document.getElementById('productoModal');
+            console.log('Modal encontrado:', modal);
+            modal.classList.remove('hidden');
+            console.log('Modal debería estar visible');
+        }
+
+        // Función para agregar al carrito desde el modal
+        function agregarAlCarritoDesdeModal() {
+            if (!productoActual) {
+                alert('No hay producto seleccionado');
+                return;
+            }
+            agregarAlCarrito(productoActual, 1);
+            // Cerrar el modal después de agregar
+            document.getElementById('productoModal').classList.add('hidden');
+        }
+
+        // Función para comprar ahora (agregar y redirigir al checkout)
+        function comprarAhora() {
+            if (!productoActual) {
+                alert('No hay producto seleccionado');
+                return;
+            }
+            agregarAlCarrito(productoActual, 1);
+            // Cerrar el modal y redirigir al checkout
+            document.getElementById('productoModal').classList.add('hidden');
+            window.location.href = '/checkout';
+        }
+
+        // Función para alternar la visibilidad de las categorías
+        function toggleCategoria(legendElement) {
+            const fieldset = legendElement.parentElement;
+            const lista = fieldset.querySelector('.categoria-lista');
+            const icon = legendElement.querySelector('.toggle-icon');
+
+            if (lista.classList.contains('hidden')) {
+                lista.classList.remove('hidden');
+                icon.textContent = '▲';
+            } else {
+                lista.classList.add('hidden');
+                icon.textContent = '▼';
+            }
+        }
+
+        // Función para aplicar filtros de categorías
+        function aplicarFiltros() {
+            const checkboxes = document.querySelectorAll('input[name="categoria"]:checked');
+            const categoriasSeleccionadas = Array.from(checkboxes).map(cb => cb.value);
+
+            // Construir URL con parámetros de filtro
+            const url = new URL(window.location.href);
+            url.searchParams.delete('categoria');
+            url.searchParams.delete('page');
+
+            categoriasSeleccionadas.forEach(catId => {
+                url.searchParams.append('categoria', catId);
+            });
+
+            // Recargar la página con los filtros
+            window.location.href = url.toString();
+        }
+
+        function cambiarPagina(pagina) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', pagina);
+            window.location.href = url.toString();
+        }
+
+        // Esperar a que el DOM esté cargado
+        document.addEventListener('DOMContentLoaded', function () {
+            // Función para cerrar el modal
+            const cerrarModalBtn = document.getElementById('cerrarModal');
+            if (cerrarModalBtn) {
+                cerrarModalBtn.addEventListener('click', function () {
+                    document.getElementById('productoModal').classList.add('hidden');
+                });
+            }
+
+            // Cerrar modal al hacer clic fuera del contenido
+            const modal = document.getElementById('productoModal');
+            if (modal) {
+                modal.addEventListener('click', function (e) {
+                    if (e.target === this) {
+                        this.classList.add('hidden');
+                    }
+                });
+
+                // Cerrar modal con tecla Escape
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                        modal.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Modal de Detalles del Producto -->
+    <div id="productoModal"
+        class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-900 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+            <!-- Botón Cerrar -->
+            <button id="cerrarModal"
+                class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors z-10">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-x-lg"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z" />
+                </svg>
+            </button>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Imagen Grande -->
+                <div class="p-6">
+                    <img id="modalImagen" src="" alt="" class="w-full rounded-lg">
+                </div>
+
+                <!-- Detalles del Producto -->
+                <div class="p-6">
+                    <h2 id="modalTitulo" class="text-2xl font-bold text-white mb-4"></h2>
+
+                    <!-- Etiquetas -->
+                    <div id="modalEtiquetas" class="flex flex-wrap gap-2 mb-6">
+                        <!-- Etiquetas se insertarán dinámicamente -->
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-white mb-2">Descripción</h3>
+                        <p id="modalDescripcion" class="text-gray-300 leading-relaxed
+                        </p>
+                    </div>
+
+                    <!-- Precio -->
+                    <div class=" mb-6">
+                        <h3 class="text-lg font-semibold text-white mb-2">Precio</h3>
+                        <p id="modalPrecio" class="text-2xl font-bold text-red-600"></p>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="flex gap-4">
+                        <button onclick="agregarAlCarritoDesdeModal()"
+                            class="flex-1 btn-neon text-white py-3 px-6 rounded-lg font-semibold">
+                            Agregar al Carrito
+                        </button>
+                        <button onclick="comprarAhora()"
+                            class="flex-1 btn-neon-secondary text-white py-3 px-6 rounded-lg font-semibold">
+                            Comprar Ahora
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,228 @@
+/* Modo Claro - IA GAMA */
+
+body.light-mode {
+    background-color: #ffffff;
+    color: #1a1a1a;
+}
+
+/* Navegación */
+body.light-mode nav {
+    background-color: #001aff;
+    border-bottom-color: #e5e5e5;
+}
+
+body.light-mode .mobile-menu {
+    background-color: #ffffff;
+    border-bottom-color: #e5e5e5;
+}
+
+/* Efectos neón adaptados para modo claro */
+body.light-mode .neon-text {
+    color: #0066cc;
+    text-shadow: 0 0 8px #0066cc, 0 0 16px #0066cc;
+}
+
+body.light-mode .neon-button {
+    background: #0066cc;
+    box-shadow: 0 0 8px #0066cc, 0 0 16px #0066cc;
+    color: #ffffff;
+}
+
+body.light-mode .neon-button:hover {
+    background: #0052a3;
+    box-shadow: 0 0 12px #0066cc, 0 0 24px #0066cc;
+}
+
+/* Secciones */
+body.light-mode section {
+    background-color: #ffffff !important;
+}
+
+/* Service cards específicas con clases Tailwind */
+body.light-mode .p-8.rounded-xl.border.border-gray-800 {
+    background-color: #ffffff !important;
+    border-color: #e5e5e5 !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .p-8.rounded-xl.border.border-gray-800:hover {
+    background-color: #f8f9fa !important;
+    border-color: #0066cc !important;
+    box-shadow: 0 4px 16px rgba(0, 102, 204, 0.15);
+}
+
+body.light-mode .service-card {
+    background-color: #ffffff;
+    border-color: #e5e5e5;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .service-card:hover {
+    background-color: #f8f9fa;
+    border-color: #0066cc;
+    box-shadow: 0 4px 16px rgba(0, 102, 204, 0.15);
+}
+
+body.light-mode .glass-card {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+body.light-mode .product-card {
+    background-color: #ffffff;
+}
+
+/* Bordes */
+body.light-mode .border-gray-800 {
+    border-color: #e5e5e5;
+}
+
+body.light-mode .border-gray-700 {
+    border-color: #d1d5db;
+}
+
+body.light-mode .border-gray-900 {
+    border-color: #e5e5e5;
+}
+
+/* Textos */
+body.light-mode .text-gray-300 {
+    color: #6b7280;
+}
+
+body.light-mode .text-gray-400 {
+    color: #6b7280;
+}
+
+body.light-mode .text-gray-500 {
+    color: #9ca3af;
+}
+
+/* Excepción: text-white en header/navegación siempre debe ser blanco */
+body.light-mode nav .text-white,
+body.light-mode .nav-layout-responsive .text-white,
+body.light-mode #mobileMenu .text-white {
+    color: #ffffff !important;
+}
+
+/* Excepción: aside de tienda debe tener texto oscuro en modo claro */
+body.light-mode aside .text-white,
+body.light-mode .sidebar .text-white,
+body.light-mode .navbar .text-white {
+    color: #1a1a1a !important;
+}
+
+/* text-white en otros elementos cambia a negro en modo claro */
+body.light-mode .text-white {
+    color: #1a1a1a;
+}
+
+/* Botones - texto blanco en ambos modos */
+body.light-mode button {
+    color: #050505 !important;
+    
+}
+
+body.light-mode .btn-neon {
+    color: #ffffff !important;
+}
+
+body.light-mode .neon-button {
+    color: #ffffff !important;
+}
+
+/* Botones específicos del menú móvil */
+body.light-mode .md\:hidden.text-blue-400 {
+    color: #ffffff !important;
+}
+
+body.light-mode .text-blue-400 {
+    color: #ffffff !important;
+}
+
+/* Hover effects */
+body.light-mode .nav-link:hover {
+    color: #0066cc;
+}
+
+body.light-mode .product-card:hover {
+    border-color: #0066cc;
+}
+
+/* Footer */
+body.light-mode footer {
+    border-top-color: #e5e5e5;
+    background-color: #f8f9fa;
+}
+
+/* Product cards */
+body.light-mode .bg-gray-900 {
+    background-color: #ffffff !important;
+}
+
+body.light-mode [class*="bg-gray-900"] {
+    background-color: #ffffff !important;
+}
+
+body.light-mode .bg-gray-800 {
+    background-color: #f3f4f6;
+}
+
+/* Details elements */
+body.light-mode details {
+    background-color: #ffffff;
+}
+
+/* Sidebar de tienda */
+body.light-mode .sidebar {
+    background-color: #f3f4f6;
+    border-color: #e5e5e5;
+}
+
+body.light-mode .navbar {
+    background-color: #f3f4f6;
+}
+
+body.light-mode .categoria-fieldset {
+    background-color: transparent;
+    border-color: #e5e5e5;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+body.light-mode .categoria-fieldset legend {
+    color: #1a1a1a;
+}
+
+body.light-mode .categoria-fieldset legend:hover {
+    color: #0066cc;
+}
+
+body.light-mode .categoria-lista {
+    background-color: #f9fafb;
+}
+
+body.light-mode .categoria-lista li {
+    color: #1a1a1a;
+}
+
+body.light-mode .categoria-lista li label {
+    color: #1a1a1a;
+}
+
+body.light-mode .categoria-lista li label:hover {
+    color: #0066cc;
+}
+
+body.light-mode .categoria-lista li input[type="checkbox"] {
+    accent-color: #0066cc;
+}
+
+/* Transición suave entre modos */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.light-mode * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}IAGAMA – Soluciones en Ingeniería e Informática{% endblock %}</title>
+
+    <!-- TAILWIND CSS -->
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+
+    <!-- LIGHT MODE CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/light-mode.css') }}">
+
+    <!-- CUSTOM CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+
+    <style>
+        /* Efecto neón */
+        .neon-blue {
+            color: #001aff;
+            text-shadow: 0 0 18px #151516, 0 8 16px #0059ff;
+        }
+
+        .btn-neon {
+            background: #001aff;
+            box-shadow: 0 0 8px #001aff, 0 0 16px #0a4cdb;
+        }
+
+        .btn-neon:hover {
+            background: #0012b8;
+            box-shadow: 0 0 12px #d2d2d4, 0 0 24px #d9dadd;
+        }
+    </style>
+
+    {% block extra_css %}
+    {% if request.endpoint=='main.tienda' %}
+    <style>
+        .nav-layout-responsive {
+            padding-top: 0.5rem !important;
+            padding-bottom: 0.5rem !important;
+        }
+
+        .nav-layout-responsive .logo-spacing img {
+            height: 2.5rem !important;
+        }
+
+        .nav-layout-responsive .nav-menu-responsive {
+            font-size: 0.875rem !important;
+        }
+
+        .mobile-menu-btn {
+            font-size: 1.5rem !important;
+        }
+    </style>
+    {% endif %}
+
+    <!-- Estilos para tema claro en mobileMenu -->
+    <style>
+        /* Mobile menu en tema claro */
+        body.light-mode #mobileMenu {
+            background-color: white !important;
+            border-color: #e5e7eb !important;
+            color: #1f2937 !important;
+        }
+
+        body.light-mode #mobileMenu .border-t {
+            border-color: #e5e7eb !important;
+        }
+
+        body.light-mode #mobileMenu span {
+            color: #1f2937 !important;
+        }
+
+        body.light-mode #mobileMenu span:hover {
+            color: #3b82f6 !important;
+        }
+
+        body.light-mode #mobileMenu button {
+            color: #3b82f6 !important;
+        }
+
+        body.light-mode #mobileMenu button:hover {
+            color: #2563eb !important;
+        }
+    </style>
+    {% endblock %}
+</head>
+
+<body class="bg-black text-white font-sans">
+    <!-- Header -->
+    {% include 'partials/header.html' %}
+
+    <!-- Contenido Principal -->
+    {% block content %}{% endblock %}
+
+    <!-- Footer -->
+    {% include 'partials/footer.html' %}
+
+    <!-- THEME TOGGLE JS -->
+    <script src="{{ url_for('static', filename='js/theme-toggle.js') }}"></script>
+
+    <!-- MAIN JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <!-- CARRITO JS -->
+    <script src="{{ url_for('static', filename='js/carrito.js') }}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

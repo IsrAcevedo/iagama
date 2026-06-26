@@ -1,0 +1,32 @@
+<header
+    class="min-h-screen max-w-[1400px] m-auto flex flex-col md:flex-row items-center justify-between px-10 md:px-10">
+    <div class="md:w-1/2 max-w-[700px] md:pb-10">
+        <h1 class="text-4xl md:text-6xl 2xl:text-9xl font-extrabold leading-tight ">
+            IAGAMA <br>
+            <span class="neon-blue text-xl md:text-3xl 2xl:text-5xl">Ingeniería e Informática.</span>
+        </h1>
+
+        <p class="mb-10 md:mt-24  text-gray-300 leading-relaxed md:text-2xl">
+            ¿Tu dispositivo falló? Lo dejamos como nuevo.
+            Tu equipo merece estar en manos expertas: reparamos computadoras, celulares y consolas xbox con servicio
+            rápido, atención inmediata y garantía real en cada reparación.
+        </p>
+
+        <!-- Botón CTA creativo -->
+         <div class="flex flex-col">
+        <a href="https://wa.me/573213908110?text=Cordial%20saludo%20IAGAMA" target="_blank"
+            class=" mb-10 md:px-10 py-4 text-base lg:text-2xl font-bold rounded-full btn-neon transition hover:scale-105 text-center">
+            👨‍💻 Solicita diagnostico gratuito
+        </a>
+        <a href="{{ url_for('main.tienda') }}"
+            class="mb-10 md:px-10 py-4 text-base lg:text-2xl font-bold rounded-full btn-neon transition hover:scale-105 text-center">
+            🛒 Ver productos de la tienda 
+        </a>
+        </div>
+    </div>
+
+    <div class="mb-16 md:mt-0 md:w-1/2 ">
+        <img src="{{ url_for('static', filename='img/hero4.png') }}" class="w-full drop-shadow-[0_0_20px_#0059ff]"
+            alt="Mockup Reference">
+    </div>
+</header>

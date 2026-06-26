@@ -1,0 +1,63 @@
+<nav class="nav-layout-responsive px-8 border-b border-gray-800 bg-black/70 backdrop-blur-md">
+    <!-- LOGO -->
+    <div class="flex items-center logo-spacing">
+        <img src="{{ url_for('static', filename='img/logo_iagamapng.png') }}" alt="IAGAMA LOGO"
+            class="h-14 drop-shadow-lg">
+    </div>
+
+    <!-- MENU DESKTOP -->
+    <ul class="nav-menu-responsive text-lg order-3 sm:order-2">
+        <li class="text-white hover:text-blue-400 transition">
+            <a href="{{ url_for('main.index') }}">Inicio</a>
+        </li>
+        <li class="text-white hover:text-blue-400 transition">
+            <a href="{{ url_for('main.index') }}#servicios">Servicios</a>
+        </li>
+        <li class="text-white hover:text-blue-400 transition">
+            <a href="{{ url_for('main.tienda') }}">Tienda</a>
+        </li>
+        <li class="text-white hover:text-blue-400 transition">
+            <a href="{{ url_for('main.index') }}#nosotros">Nosotros</a>
+        </li>
+        <li class="text-white hover:text-blue-400 transition">
+            <a href="{{ url_for('main.index') }}#contacto">Contacto</a>
+        </li>
+    </ul>
+
+    <!-- CONTROLES DERECHA -->
+    <div class="flex items-center gap-4 order-2 sm:order-3">
+        <!-- Botón tema (visible en desktop) -->
+        <button id="themeToggleDesktop" class="hidden md:flex text-white text-2xl hover:text-blue-400 transition" title="Cambiar tema">
+            🌙
+        </button>
+
+        <!-- Botón móvil -->
+        <button class="mobile-menu-btn text-white text-3xl hover:text-blue-400 transition" onclick="toggleMenu()">☰</button>
+    </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div id="mobileMenu" class="hidden flex-col bg-black border-b border-gray-800 p-6 text-center space-y-4 md:hidden sticky top-[4.5rem] z-40">
+    <span class=" hover:text-blue-400 transition">
+        <a href="{{ url_for('main.index') }}">Inicio</a>
+    </span>
+    <span class=" hover:text-blue-400 transition">
+        <a href="{{ url_for('main.index') }}#servicios">Servicios</a>
+    </span>
+    <span class=" hover:text-blue-400 transition">
+        <a href="{{ url_for('main.tienda') }}">Tienda</a>
+    </span>
+    <span class=" hover:text-blue-400 transition">
+        <a href="{{ url_for('main.index') }}#nosotros">Nosotros</a>
+    </span>
+    <span class=" hover:text-blue-400 transition">
+        <a href="{{ url_for('main.index') }}#contacto">Contacto</a>
+    </span>
+
+    <!-- Separador y botón tema móvil -->
+    <div class="border-t border-gray-700 pt-4 mt-4">
+        <button id="themeToggleMobile" class=" hover:text-blue-400 transition">
+            🌙 Cambiar Tema
+        </button>
+    </div>
+</div>

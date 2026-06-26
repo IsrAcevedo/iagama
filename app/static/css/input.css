@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+}
+
+/* Custom components */
+@layer components {
+  .neon-text {
+    @apply text-neon-blue;
+    text-shadow: 0 0 8px currentColor, 0 0 16px currentColor;
+  }
+  
+  .neon-button {
+    @apply bg-neon-blue text-white px-6 py-3 rounded-full font-bold transition-all duration-300 hover:scale-105;
+    box-shadow: 0 0 8px #0066cc, 0 0 16px #0066cc;
+  }
+  
+  .neon-button:hover {
+    box-shadow: 0 0 12px #0066cc, 0 0 24px #0066cc;
+  }
+  
+  .glass-card {
+    @apply bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-6;
+  }
+  
+  .service-card {
+    @apply p-8 rounded-xl border border-gray-800 hover:border-neon-blue transition-all duration-500 ease-in-out transform hover:scale-[1.02] bg-gray-900/50;
+  }
+  
+  .product-card {
+    @apply bg-gray-900 p-6 rounded-xl border border-gray-700 hover:border-neon-blue transition-all duration-300;
+  }
+  
+  .nav-link {
+    @apply hover:text-neon-blue transition-colors duration-200;
+  }
+  
+  .mobile-menu {
+    @apply hidden flex-col bg-black border-b border-gray-800 p-6 text-center space-y-4 md:hidden;
+  }
+}
+
+/* Custom utilities */
+@layer utilities {
+  .text-shadow-neon {
+    text-shadow: 0 0 8px currentColor, 0 0 16px currentColor;
+  }
+  
+  .bg-gradient-dark {
+    background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  }
+  
+  .bg-gradient-light {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  }
+}
