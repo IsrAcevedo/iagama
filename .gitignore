@@ -144,7 +144,7 @@ temp/
 .vscode-test
 
 # Images and media files
-app/static/productos/*
+app/static/productos/*.webp
 
 # Font files
 *.ttf
