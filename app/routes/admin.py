@@ -425,7 +425,7 @@ def crear_producto():
             return jsonify({'success': False, 'message': 'El precio debe ser un número válido'}), 400
         
         # Procesar y guardar la imagen si se proporciona
-        nombre_imagen = None
+        nombre_imagen = "image.png"
         if imagen_principal and imagen_principal.filename:
             if not allowed_file(imagen_principal.filename):
                 return jsonify({'success': False, 'message': 'Solo se permiten archivos .webp'}), 400

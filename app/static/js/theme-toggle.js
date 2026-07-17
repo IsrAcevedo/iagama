@@ -6,11 +6,10 @@ class ThemeManager {
     }
 
     init() {
-        // Verificar preferencia guardada o preferencia del sistema
+        // Verificar preferencia guardada (predeterminado: oscuro)
         const savedTheme = localStorage.getItem('theme');
-        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-        if (savedTheme === 'light' || (!savedTheme && !systemPrefersDark)) {
+        if (savedTheme === 'light') {
             this.setLightMode();
         } else {
             this.setDarkMode();
@@ -18,17 +17,6 @@ class ThemeManager {
 
         // Configurar botones existentes en el HTML
         this.setupToggleButtons();
-
-        // Escuchar cambios en preferencia del sistema
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-            if (!localStorage.getItem('theme')) {
-                if (e.matches) {
-                    this.setDarkMode();
-                } else {
-                    this.setLightMode();
-                }
-            }
-        });
     }
 
     setupToggleButtons() {
@@ -81,9 +69,9 @@ class ThemeManager {
         document.body.classList.add('light-mode');
         document.body.classList.remove('dark-mode');
 
+        this.isDarkMode = false;
         this.updateButtonStates();
 
-        this.isDarkMode = false;
         localStorage.setItem('theme', 'light');
     }
 
@@ -91,9 +79,9 @@ class ThemeManager {
         document.body.classList.remove('light-mode');
         document.body.classList.add('dark-mode');
 
+        this.isDarkMode = true;
         this.updateButtonStates();
 
-        this.isDarkMode = true;
         localStorage.setItem('theme', 'dark');
     }
 

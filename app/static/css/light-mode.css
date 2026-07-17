@@ -7,8 +7,9 @@ body.light-mode {
 
 /* Navegación */
 body.light-mode nav {
-    background-color: #001aff;
-    border-bottom-color: #e5e5e5;
+    background-color: #fff;
+    color: #000;
+    border-bottom-color: #000;
 }
 
 body.light-mode .mobile-menu {
@@ -112,13 +113,11 @@ body.light-mode .navbar .text-white {
 }
 
 /* text-white en otros elementos cambia a negro en modo claro */
-body.light-mode .text-white {
-    color: #1a1a1a;
-}
+
 
 /* Botones - texto blanco en ambos modos */
 body.light-mode button {
-    color: #050505 !important;
+    color: #fff !important;
     
 }
 
@@ -216,6 +215,71 @@ body.light-mode .categoria-lista li label:hover {
 
 body.light-mode .categoria-lista li input[type="checkbox"] {
     accent-color: #0066cc;
+}
+
+/* Hero section en modo claro */
+body.light-mode .hero-section {
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.95) 100%),
+        url("../img/hero.png");
+    background-position: center 25%;
+    background-size: cover;
+}
+
+@media (min-width: 768px) {
+    body.light-mode .hero-section {
+        background-image: linear-gradient(90deg, #ffffff 45%, rgba(255, 255, 255, 0.6) 70%, rgba(255, 255, 255, 0.85) 100%),
+            url("../img/hero.png");
+        background-position: right center;
+        background-size: contain;
+    }
+}
+
+/* Textos del hero en modo claro */
+body.light-mode .hero-section h1 {
+    color: #1a1a1a;
+}
+
+body.light-mode .hero-section .text-blue-500 {
+    color: #0066cc !important;
+}
+
+body.light-mode .hero-section p {
+    color: #4b5563;
+}
+
+body.light-mode  .text-white {
+    color: #fff  ;
+}
+
+/* Badge de ubicación en modo claro */
+body.light-mode .hero-section .bg-gray-950\/70 {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    border-color: #e5e5e5 !important;
+}
+
+body.light-mode .hero-section .text-gray-400 {
+    color: #6b7280 !important;
+}
+
+/* Iconos del hero en modo claro */
+body.light-mode .hero-section .bg-gray-950 {
+    background-color: #ffffff !important;
+    border-color: #e5e5e5 !important;
+}
+
+/* Overlay radial en modo claro */
+body.light-mode .hero-section .bg-\[radial-gradient\(circle_at_30\%_30\%\2c rgba\(0\2c102\2c255\2c0\.08\)\2ctransparent_50\%\)\] {
+    background: radial-gradient(circle at 30% 30%, rgba(0, 102, 204, 0.05), transparent 50%);
+}
+
+/* Border de características en modo claro */
+body.light-mode .hero-section .border-gray-800\/80 {
+    border-color: #e5e5e5 !important;
+}
+
+/* Botón Ver tienda en modo claro - texto negro */
+body.light-mode .hero-tienda-btn {
+    color: #000000 !important;
 }
 
 /* Transición suave entre modos */
