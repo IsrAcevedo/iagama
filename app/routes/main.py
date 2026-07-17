@@ -7,8 +7,9 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
-    user = 'Israel'  # Puedes cambiar esto por una variable dinámica
-    return render_template('index.html', user=user)
+    query = "SELECT id, nombre, precio, imagen_principal FROM productos WHERE activo = 1 AND es_destacado = 1 LIMIT 4"
+    productos = consulta(query)
+    return render_template('index.html', productos=productos)
 
 
 @main_bp.route('/tienda')
