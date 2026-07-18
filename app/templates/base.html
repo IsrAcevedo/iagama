@@ -5,7 +5,112 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{% block title %}IAGAMA – Soluciones en Ingeniería e Informática{% endblock %}</title>
+    <title>{% block title %}IAGAMA – {{ block.super }}{% endblock %}</title>
+    <meta name="description"
+content="Especialistas en reparación y mantenimiento de computadores, cambio de pantallas para celulares y venta de accesorios tecnológicos en Saravena, Arauca. Diagnóstico profesional y garantía.">
+<meta name="keywords"
+content="reparación de computadores, mantenimiento de computadores, reparación de portátiles, cambio de pantalla celular, accesorios tecnológicos, tienda de tecnología, Saravena, Arauca, servicio técnico computadores, IAGama">
+<meta name="robots" content="index,follow">
+<meta name="author" content="IAGama">
+<meta http-equiv="content-language" content="es-co">
+<link rel="canonical" href="https://www.iagama.com/">
+<link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}" type="image/x-icon">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ComputerStore",
+  "name": "IAGama",
+  "url": "https://www.iagama.com",
+  "logo": "https://www.iagama.com/static/img/logo.webp",
+  "image": "https://www.iagama.com/static/img/og-image.webp",
+  "description": "Reparación y mantenimiento de computadores, cambio de pantallas para celulares y venta de accesorios tecnológicos en Saravena, Arauca.",
+
+  "telephone": "+57 3213908110",
+
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "calle 25 # 15 - 89",
+    "addressLocality": "Saravena",
+    "addressRegion": "Arauca",
+    "postalCode": "815010",
+    "addressCountry": "CO"
+  },
+
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "6.954579013824563",
+    "longitude": "-71.87573511060396"
+  },
+
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "08:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "08:00",
+      "closes": "13:00"
+    }
+  ],
+
+  "sameAs": [
+    "https://www.facebook.com/profile.php?id=61559563177193",
+    "https://www.instagram.com/TU-USUARIO"
+  ],
+
+  "areaServed": {
+    "@type": "City",
+    "name": "Saravena"
+  },
+
+  "priceRange": "$$",
+
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicios y productos IAGama",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Reparación de computadores"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Mantenimiento de computadores"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Cambio de pantalla para celulares"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Product",
+          "name": "Accesorios tecnológicos"
+        }
+      }
+    ]
+  }
+}
+</script>
 
     <!-- TAILWIND CSS -->
     <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">

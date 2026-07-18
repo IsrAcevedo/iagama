@@ -7,7 +7,7 @@ main_bp = Blueprint('main', __name__)
 
 @main_bp.route('/')
 def index():
-    query = "SELECT id, nombre, precio, imagen_principal FROM productos WHERE activo = 1 AND es_destacado = 1 LIMIT 4"
+    query = "SELECT id, nombre, precio, imagen_principal, tipo_entrega FROM productos WHERE activo = 1 AND es_destacado = 1 LIMIT 4"
     productos = consulta(query)
     return render_template('index.html', productos=productos)
 
